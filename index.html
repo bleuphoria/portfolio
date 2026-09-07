@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heinrich Blue Gumaca - Professional Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9',
+                        primaryDark: '#0284c7',
+                        darkBg: '#0f172a',
+                        darkCard: '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Subtle fade-in animation for formal feel */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Page Loading Animation */
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .dark #page-loader { background-color: #0f172a; }
+        #page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #0ea5e9;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .dark .loader-spinner {
+            border-color: #334155;
+            border-top-color: #0ea5e9;
+        }
+        .loader-text {
+            margin-top: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #64748b;
+            letter-spacing: 0.05em;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scroll to Top Button */
+        #scroll-top-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 40;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0ea5e9;
+            color: white;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
+            pointer-events: none;
+            cursor: pointer;
+            border: none;
+        }
+        #scroll-top-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        #scroll-top-btn:hover {
+            background-color: #0284c7;
+        }
+
+        /* Active Nav Link */
+        .nav-link-active {
+            color: #0ea5e9 !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darkBg dark:text-gray-200 antialiased selection:bg-primary selection:text-white">
+
+    <!-- Page Loading Animation -->
+    <div id="page-loader">
+        <div class="loader-spinner"></div>
+        <p class="loader-text">Loading Portfolio...</p>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-top-btn" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 dark:bg-darkBg/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Name -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="text-xl font-bold text-gray-900 dark:text-white tracking-tight hover:text-primary dark:hover:text-primary transition-colors">
+                        Heinrich.
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" data-section="about" class="nav-link text-sm font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors">About</a>
+                    <a href="#skills" data-section="skills" class="nav-link text-sm font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors">Skills</a>
+                    <a href="#background" data-section="background" class="nav-link text-sm font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors">Background</a>
+                    <a href="#projects" data-section="projects" class="nav-link text-sm font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors">Projects</a>
+                    <a href="#contact" data-section="contact" class="nav-link text-sm font-medium text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary transition-colors">Contact</a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary">
+                        <i id="theme-icon" class="fas fa-moon"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="theme-toggle-mobile" class="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none">
+                        <i id="theme-icon-mobile" class="fas fa-moon"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300 hover:text-primary focus:outline-none p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-darkBg border-b border-gray-200 dark:border-gray-800 transition-colors">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary">About</a>
+                <a href="#skills" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary">Skills</a>
+                <a href="#background" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary">Background</a>
+                <a href="#projects" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary">Projects</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center">
+        <div class="fade-in-up">
+            <p class="text-primary font-semibold tracking-wider uppercase text-sm mb-4">Portfolio</p>
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold text-gray-900 dark:text-white tracking-tight mb-6">
+                Heinrich Blue Gumaca
+            </h1>
+            <h2 class="text-xl sm:text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-8">
+                3rd Year IT Student &middot; University of Mindanao
+            </h2>
+            <p class="text-base sm:text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                A dedicated Information Technology student with a strong foundation in web and software development. 
+                Currently seeking an internship or OJT opportunity to contribute to real-world projects and further hone my skills.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#contact" class="inline-flex justify-center items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primaryDark transition-colors shadow-sm">
+                    Contact Me
+                </a>
+                <a href="#" class="inline-flex justify-center items-center px-8 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm">
+                    View Resume <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Social Links -->
+            <div class="mt-12 flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-gray-900 dark:hover:text-white text-xl transition-colors"><span class="sr-only">GitHub</span><i class="fab fa-github"></i></a>
+                <a href="mailto:example@umindanao.edu.ph" class="text-gray-400 hover:text-primary text-xl transition-colors"><span class="sr-only">Email</span><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white dark:bg-darkCard border-y border-gray-100 dark:border-gray-800 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">About Me</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+            </div>
+            
+            <div class="prose prose-lg dark:prose-invert mx-auto text-gray-600 dark:text-gray-400 leading-relaxed fade-in-up">
+                <p class="mb-6">
+                    Hello! I am Heinrich, a passionate 3rd-year Information Technology student at the University of Mindanao. My academic journey has been driven by a deep fascination with how technology solves complex problems. 
+                </p>
+                <p class="mb-6">
+                    Throughout my coursework, I have actively pursued a well-rounded understanding of software architecture, focusing heavily on full-stack web development. I enjoy building applications from the ground up, starting with database design, moving to server-side logic, and finishing with responsive, user-friendly interfaces.
+                </p>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">Career Goals</h3>
+                <p>
+                    My immediate goal is to secure a meaningful <strong>On-the-Job Training (OJT) or Internship</strong> position where I can apply my academic knowledge to industry-standard projects. In the long term, I aim to become a versatile Full-Stack Developer capable of leading robust software solutions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-gray-50 dark:bg-darkBg transition-colors">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Technical Proficiencies</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Technologies and languages I have learned and applied throughout my academic and personal projects.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 fade-in-up">
+                <!-- Skill Cards -->
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-html5 text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">HTML & CSS</h3>
+                </div>
+                
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-js text-4xl text-yellow-400 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">JavaScript</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-react text-4xl text-blue-400 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">React.js</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-php text-4xl text-indigo-400 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">PHP</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-laravel text-4xl text-red-500 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Laravel</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-java text-4xl text-orange-600 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Java</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fab fa-python text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Python</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fas fa-database text-4xl text-gray-600 dark:text-gray-400 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Databases (SQL)</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fas fa-code text-4xl text-purple-600 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">C#</h3>
+                </div>
+
+                <div class="bg-white dark:bg-darkCard border border-gray-200 dark:border-gray-700 p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow">
+                    <i class="fas fa-microchip text-4xl text-blue-700 mb-4"></i>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">C++</h3>
+                </div>
+            </div>
+            
+            <!-- Soft Skills -->
+            <div class="mt-12 text-center fade-in-up">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Professional Soft Skills</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium">Problem Solving</span>
+                    <span class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium">Team Collaboration</span>
+                    <span class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium">Adaptability</span>
+                    <span class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium">Time Management</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Background (Education & Experience) Section -->
+    <section id="background" class="py-20 bg-white dark:bg-darkCard border-y border-gray-100 dark:border-gray-800 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Academic Background & Experience</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+            </div>
+
+            <div class="space-y-12">
+                <!-- Education -->
+                <div class="fade-in-up">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <i class="fas fa-graduation-cap text-primary mr-3"></i> Education
+                    </h3>
+                    <div class="relative border-l border-gray-300 dark:border-gray-700 ml-3 pl-8 pb-4">
+                        <div class="absolute w-4 h-4 bg-primary rounded-full -left-[9px] top-1"></div>
+                        <h4 class="text-xl font-semibold text-gray-900 dark:text-white">University of Mindanao</h4>
+                        <p class="text-primary font-medium my-1">Bachelor of Science in Information Technology (3rd Year)</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">2021 - Present</p>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Currently maintaining strong academic standing while participating in core programming, database management, and systems integration courses. 
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="fade-in-up">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <i class="fas fa-briefcase text-primary mr-3"></i> Experience
+                    </h3>
+                    <div class="relative border-l border-gray-300 dark:border-gray-700 ml-3 pl-8">
+                        <div class="absolute w-4 h-4 bg-primary rounded-full -left-[9px] top-1"></div>
+                        <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Student Developer / Project Lead</h4>
+                        <p class="text-primary font-medium my-1">Academic Projects</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">2022 - Present</p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">
+                            Designed, developed, and deployed various academic web applications and software systems as part of coursework. Collaborated with peers using version control (Git) to manage codebases effectively.
+                        </p>
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-md p-4 mt-4 inline-block">
+                            <p class="text-primary dark:text-blue-300 text-sm font-medium">
+                                <i class="fas fa-search mr-2"></i> Actively seeking Internship / OJT opportunities.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-gray-50 dark:bg-darkBg transition-colors">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in-up">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Academic Projects</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">A selection of technical projects developed during my studies.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 fade-in-up">
+                <!-- Project 1 -->
+                <div class="bg-white dark:bg-darkCard rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <i class="fas fa-boxes-stacked text-5xl text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Tyk Inventory System</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                            A full-featured inventory management system built to track products, manage stock levels, and generate reports. Includes user authentication, CRUD operations, and a responsive admin dashboard.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">Laravel</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">PHP</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">MySQL</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">HTML</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">Tailwind CSS</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="#" class="text-sm font-medium text-primary hover:underline"><i class="fab fa-github mr-1"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="bg-white dark:bg-darkCard rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                        <i class="fas fa-hospital text-5xl text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">WellCare ERP: Integrated Clinic & Patient System</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                            A comprehensive ERP solution designed for small and medium healthcare clinics. Manages patient records, appointment scheduling, billing, and clinical workflows in one unified platform.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">C#</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-xs rounded font-medium">MonsterASP</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="#" class="text-sm font-medium text-primary hover:underline"><i class="fab fa-github mr-1"></i> View Code</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white dark:bg-darkCard border-t border-gray-100 dark:border-gray-800 transition-colors">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 fade-in-up">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h2>
+                <div class="w-16 h-1 bg-primary mx-auto rounded"></div>
+                <p class="mt-4 text-gray-600 dark:text-gray-400">Interested in discussing an OJT opportunity? Feel free to reach out.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 fade-in-up">
+                <!-- Contact Info -->
+                <div class="md:col-span-1 space-y-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="fas fa-envelope text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-medium text-gray-900 dark:text-white">Email</h4>
+                            <a href="mailto:h.gumaca.528486@umindanao.edu.ph" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">example@umindanao.edu.ph</a>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="fab fa-github text-primary text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="text-lg font-medium text-gray-900 dark:text-white">GitHub</h4>
+                            <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">github.com/bleuphoria</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="md:col-span-2">
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 dark:text-white transition-colors" placeholder="Your Name">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 dark:text-white transition-colors" placeholder="your.email@example.com">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-primary focus:border-primary bg-white dark:bg-gray-800 dark:text-white transition-colors resize-none" placeholder="Your message here..."></textarea>
+                        </div>
+                        <button type="button" class="w-full sm:w-auto px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primaryDark transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-darkBg border-t border-gray-200 dark:border-gray-800 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                &copy; <span id="year"></span> Heinrich Blue Gumaca. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Dark Mode Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeIconMobile = document.getElementById('theme-icon-mobile');
+        
+        // Check for saved theme preference or use system preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+            themeIconMobile.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        const toggleTheme = () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                themeIconMobile.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeIconMobile.classList.replace('fa-moon', 'fa-sun');
+            }
+        };
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Scroll Animations using Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(element => {
+            observer.observe(element);
+        });
+        // Page Loader — dismiss after page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('page-loader').classList.add('hidden');
+            }, 800); // slight delay for a polished feel
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scroll-top-btn');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Active Nav Highlighting on Scroll
+        const navLinks = document.querySelectorAll('.nav-link');
+        const allSections = document.querySelectorAll('section[id]');
+
+        const activateNav = () => {
+            let scrollPos = window.scrollY + 120; // offset for fixed nav height
+
+            allSections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('nav-link-active');
+                        if (link.getAttribute('data-section') === sectionId) {
+                            link.classList.add('nav-link-active');
+                        }
+                    });
+                }
+            });
+        };
+
+        window.addEventListener('scroll', activateNav);
+        activateNav(); // run once on load
+    </script>
+</body>
+</html>
